@@ -44,6 +44,9 @@ import SetupMfa from "../pages/SetupMfa";
 import ChangePassword from "../pages/Authentication/ChangePassword";
 import NotAuthorized from "../pages/NotAuthorized"; // Ensure this component exists
 import RoleBasedRedirect from "./RoleBasedRedirect"; // New component
+import TestimonialsList from "../pages/Ecommerce/Testimonial/TestimonialList";
+import TestimonialAdd from "../pages/Ecommerce/Testimonial/TestimonialAdd";
+import TestimonialEdit from "../pages/Ecommerce/Testimonial/TestimonialEdit";
 
 const roles = {
   ADMIN: "admin",
@@ -196,21 +199,39 @@ const authProtectedRoutes = [
   },
 
   // Banners
-  {
-    path: "/bannerlist",
-    component: <BannersList />,
-    roles: [roles.ADMIN, roles.MARKETING],
-  },
-  {
-    path: "/addbanner",
-    component: <BannerAdd />,
-    roles: [roles.ADMIN, roles.MARKETING],
-  },
-  {
-    path: "/editbanner/:id",
-    component: <BannerEdit />,
-    roles: [roles.ADMIN, roles.MARKETING],
-  },
+{
+  path: "/bannerlist",
+  component: <BannersList />,
+  roles: [roles.ADMIN, roles.MARKETING],
+},
+{
+  path: "/addbanner",
+  component: <BannerAdd />,
+  roles: [roles.ADMIN, roles.MARKETING],
+},
+{
+  path: "/editbanner/:id",
+  component: <BannerEdit />,
+  roles: [roles.ADMIN, roles.MARKETING],
+},
+
+// Testimonials
+{
+  path: "/testimoniallist",
+  component: <TestimonialsList />,
+  roles: [roles.ADMIN, roles.MARKETING],
+},
+{
+  path: "/addtestimonial",
+  component: <TestimonialAdd />,
+  roles: [roles.ADMIN, roles.MARKETING],
+},
+{
+  path: "/edittestimonial/:id",
+  component: <TestimonialEdit />,
+  roles: [roles.ADMIN, roles.MARKETING],
+},
+
 
   // Subscribers List
   {

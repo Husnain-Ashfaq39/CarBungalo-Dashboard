@@ -18,7 +18,7 @@ import TableContainer from "../../../Components/Common/TableContainer";
 import { Link } from "react-router-dom";
 import db from "../../../appwrite/Services/dbServices";
 import storageServices from "../../../appwrite/Services/storageServices";
-import { Query } from "appwrite"; // Import the Query from Appwrite
+import { Query } from "appwrite";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -27,68 +27,72 @@ import Lottie from "lottie-react";
 import loadingAnimation from "../../../assets/animations/loading.json";
 import noDataAnimation from "../../../assets/animations/search.json";
 
-const AboutUsList = () => {
-  const [AboutUsList, setAboutUsList] = useState([]);
-  const [cursor, setCursor] = useState(null); // State for pagination cursor
-  const [hasMore, setHasMore] = useState(true); // State to track if more AboutUs are available
+const TestimonialsList = () => {
+  const [testimonialsList, setTestimonialsList] = useState([]);
+  const [cursor, setCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [aboutusToDelete, setaboutusToDelete] = useState(null);
+  const [testimonialToDelete, setTestimonialToDelete] = useState(null);
 
-  const limit = 100; // Set limit to a larger value to fetch more AboutUs
+  const limit = 100;
 
   useEffect(() => {
-    const fetchAboutUs = async () => {
-      if (!hasMore) return; // If no more AboutUs are available, stop fetching
+    const fetchTestimonials = async () => {
+      if (!hasMore) return;
 
       try {
         setIsLoading(true);
-
         const queries = [Query.limit(limit)];
         if (cursor) {
-          queries.push(Query.cursorAfter(cursor)); // Pagination handling
+          queries.push(Query.cursorAfter(cursor));
         }
 
-        const response = await db.AboutUs.list(queries);
-        const AboutUs = response.documents || [];
+        const response = await db.testimonials.list(queries);
+        const testimonials = response.documents || [];
 
-        if (AboutUs.length < limit) {
-          setHasMore(false); // If fetched data is less than limit, we have reached the end
+        if (testimonials.length < limit) {
+          setHasMore(false);
         }
 
-        if (AboutUs.length > 0) {
-          setCursor(AboutUs[AboutUs.length - 1].$id); // Set the cursor for the next batch
+        if (testimonials.length > 0) {
+          setCursor(testimonials[testimonials.length - 1].$id);
         }
 
-        setAboutUsList((prev) => [...prev, ...AboutUs]); // Append new AboutUs to the list
+        setTestimonialsList((prev) => [...prev, ...testimonials]);
+
       } catch (error) {
-        console.error("Failed to fetch AboutUs:", error);
-        toast.error("Failed to fetch AboutUs");
+        console.error("Failed to fetch testimonials:", error);
+        toast.error("Failed to fetch testimonials");
       } finally {
         setIsLoading(false);
       }
     };
-    fetchAboutUs();
+
+    fetchTestimonials();
   }, [cursor, hasMore]);
 
-  const onClickDelete = (aboutus) => {
-    setaboutusToDelete(aboutus);
+  const onClickDelete = (testimonial) => {
+    setTestimonialToDelete(testimonial);
     setDeleteModal(true);
   };
 
-  const handleDeleteaboutus = async () => {
-    if (aboutusToDelete) {
+  const handleDeleteTestimonial = async () => {
+    if (testimonialToDelete) {
       try {
-        if (aboutusToDelete.imageId) {
-          await storageServices.images.deleteFile(aboutusToDelete.imageId);
+        if (testimonialToDelete.profilePicId) {
+          await storageServices.images.deleteFile(testimonialToDelete.profilePicId);
         }
-        await db.AboutUs.delete(aboutusToDelete.$id);
+        if (testimonialToDelete.imageId) {
+          await storageServices.images.deleteFile(testimonialToDelete.imageId);
+        }
+        await db.testimonials.delete(testimonialToDelete.$id);
         setDeleteModal(false);
-        setAboutUsList(AboutUsList.filter((b) => b.$id !== aboutusToDelete.$id));
-        toast.success("About Us deleted successfully");
+        setTestimonialsList(testimonialsList.filter((t) => t.$id !== testimonialToDelete.$id));
+        toast.success("Testimonial deleted successfully");
       } catch (error) {
-        console.error("Failed to delete About Us:", error);
-        toast.error("Failed to delete About Us");
+        console.error("Failed to delete testimonial:", error);
+        toast.error("Failed to delete testimonial");
       }
     }
   };
@@ -103,35 +107,49 @@ const AboutUsList = () => {
     () => [
       { header: "S/N", id: "serialNumber", cell: (info) => info.row.index + 1 },
       {
-        header: "Image",
+        header: "Profile Picture",
+        accessorKey: "profilePicId",
+        id: "profilePicture",
+        cell: (info) => (
+          <img
+            src={getImageURL(info.row.original.profilePicId)}
+            alt="Profile Pic"
+            className="img-thumbnail"
+            style={{ width: "50px", height: "50px", objectFit: "cover" }}
+          />
+        ),
+      },
+      {
+        header: "Additional Image",
         accessorKey: "imageId",
         id: "image",
         cell: (info) => (
           <img
             src={getImageURL(info.row.original.imageId)}
-            alt="About Us"
+            alt="Additional"
             className="img-thumbnail"
-            style={{ width: "100px", height: "100px", objectFit: "cover" }}
+            style={{ width: "50px", height: "50px", objectFit: "cover" }}
           />
         ),
       },
-      { header: "Title", accessorKey: "title" },
+      { header: "Name", accessorKey: "name" },
+      { header: "Position", accessorKey: "position" },
       { header: "Content", accessorKey: "content" },
       {
         header: "Actions",
         id: "actions",
         cell: (info) => {
-          const aboutusData = info.row.original;
+          const testimonialData = info.row.original;
           return (
             <UncontrolledDropdown>
               <DropdownToggle href="#" className="btn btn-soft-secondary btn-sm" tag="button">
                 <i className="ri-more-fill" />
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-end">
-                <DropdownItem tag={Link} to={`/editbanner/${aboutusData.$id}`}>
+                <DropdownItem tag={Link} to={`/edittestimonial/${testimonialData.$id}`}>
                   <i className="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit
                 </DropdownItem>
-                <DropdownItem href="#" onClick={() => onClickDelete(aboutusData)}>
+                <DropdownItem href="#" onClick={() => onClickDelete(testimonialData)}>
                   <i className="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete
                 </DropdownItem>
               </DropdownMenu>
@@ -158,7 +176,7 @@ const AboutUsList = () => {
     <div className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: '300px' }}>
       <Lottie animationData={noDataAnimation} style={{ width: 150, height: 150 }} loop={true} />
       <div className="mt-3">
-        <h5>No About Us Found.</h5>
+        <h5>No Testimonials Found.</h5>
       </div>
     </div>
   );
@@ -166,37 +184,29 @@ const AboutUsList = () => {
   return (
     <div className="page-content">
       <ToastContainer closeButton={false} limit={1} />
-      <DeleteModal show={deleteModal} onDeleteClick={handleDeleteaboutus} onCloseClick={() => setDeleteModal(false)} />
+      <DeleteModal show={deleteModal} onDeleteClick={handleDeleteTestimonial} onCloseClick={() => setDeleteModal(false)} />
       <Container fluid>
-        <BreadCrumb title="About Us" pageTitle="About Us" />
+        <BreadCrumb title="Testimonials" pageTitle="Testimonials" />
         <Row>
           <Col lg={12}>
             <Card>
               <CardHeader className="d-flex align-items-center">
-                <h4 className="card-title mb-0 flex-grow-1">About Us List</h4>
+                <h4 className="card-title mb-0 flex-grow-1">Testimonials List</h4>
                 <div className="flex-shrink-0">
-                  {/* Conditionally disable the Add About Us button based on AboutUsList length */}
-                  {AboutUsList.length === 0 ? (
-                    <Link to="/addbanner" className="btn btn-primary">
-                      Add Data
-                    </Link>
-                  ) : (
-                    <Button color="primary" disabled>
-                      Add Data
-                    </Button>
-                  )}
+                  <Link to="/addtestimonial" className="btn btn-primary">
+                    Add Testimonial
+                  </Link>
                 </div>
               </CardHeader>
               <CardBody>
-                {isLoading && AboutUsList.length === 0 ? (
+                {isLoading && testimonialsList.length === 0 ? (
                   // Loading Indicator
                   renderLoadingAnimation()
-                ) : AboutUsList && AboutUsList.length > 0 ? (
+                ) : testimonialsList && testimonialsList.length > 0 ? (
                   <>
                     <TableContainer
                       columns={columns}
-                      data={AboutUsList}
-                      // Removed search-related props
+                      data={testimonialsList}
                       isGlobalFilter={false}
                       customPageSize={10}
                       divClass="table-responsive mb-1"
@@ -224,4 +234,4 @@ const AboutUsList = () => {
   );
 };
 
-export default AboutUsList;
+export default TestimonialsList;

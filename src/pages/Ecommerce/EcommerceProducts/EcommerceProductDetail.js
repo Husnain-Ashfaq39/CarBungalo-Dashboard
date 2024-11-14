@@ -120,7 +120,7 @@ const EcommerceProductDetail = () => {
             : null,
           stockQuantity: parseInt(productResponse.stockQuantity, 10),
           isOnSale: Boolean(productResponse.isOnSale),
-          isWholesaleProduct: Boolean(productResponse.isWholesaleProduct),
+         
           // Remove wholesalePrice as it's deprecated
           tags: productResponse.tags || [],
           images: productResponse.images || [],
@@ -377,19 +377,7 @@ const EcommerceProductDetail = () => {
                             color: product.isOnSale ? "warning" : "secondary",
                           }}
                         />
-                        {/* Wholesale Status */}
-                        <PricingWidgetList
-                          pricingDetails={{
-                            icon: "ri-store-line",
-                            label: "Wholesale",
-                            labelDetail: product.isWholesaleProduct
-                              ? "Available"
-                              : "Not Available",
-                            color: product.isWholesaleProduct
-                              ? "primary"
-                              : "secondary",
-                          }}
-                        />
+                      
                       </Row>
 
                       {/* Tags */}
@@ -499,14 +487,7 @@ const EcommerceProductDetail = () => {
                                     <th scope="row">On Sale</th>
                                     <td>{product.isOnSale != null ? (product.isOnSale ? "Yes" : "No") : 'N/A'}</td>
                                   </tr>
-                                  <tr>
-                                    <th scope="row">Wholesale</th>
-                                    <td>
-                                      {product.isWholesaleProduct != null
-                                        ? (product.isWholesaleProduct ? "Available" : "Not Available")
-                                        : 'N/A'}
-                                    </td>
-                                  </tr>
+                                 
                                   {product.isWholesaleProduct && (
                                     <tr>
                                       <th scope="row">Minimum Purchase Quantity</th>

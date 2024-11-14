@@ -42,7 +42,6 @@ const EcommerceProducts = () => {
     min: 0,
     max: 1000,
   });
-  const [isWholesaleFilter, setIsWholesaleFilter] = useState(false);
   const [isOnSaleFilter, setIsOnSaleFilter] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteModalMulti, setDeleteModalMulti] = useState(false);
@@ -79,7 +78,6 @@ const EcommerceProducts = () => {
       ...product,
       price: parseFloat(product.price),
       isOnSale: Boolean(product.isOnSale),
-      isWholesaleProduct: Boolean(product.isWholesaleProduct),
     }));
 
     return products;
@@ -173,7 +171,7 @@ const EcommerceProducts = () => {
   // Filter products whenever filters change
   useEffect(() => {
     filterProducts();
-  }, [productList, categoryFilter, priceRange, isWholesaleFilter, isOnSaleFilter]);
+  }, [productList, categoryFilter, priceRange, isOnSaleFilter]);
 
   // Function to get category name from ID
   const getCategoryName = (categoryId) => {
@@ -201,10 +199,6 @@ const EcommerceProducts = () => {
         product.price >= priceRange.min && product.price <= priceRange.max
     );
 
-    // Wholesale filter
-    if (isWholesaleFilter) {
-      filtered = filtered.filter((product) => product.isWholesaleProduct === true);
-    }
 
     // On Sale filter
     if (isOnSaleFilter) {
@@ -326,7 +320,6 @@ const EcommerceProducts = () => {
       "category",
       "price",
       "isOnSale",
-      "isWholesaleProduct",
       "stockQuantity",
       "images",
       "tags",
@@ -346,7 +339,7 @@ const EcommerceProducts = () => {
       "category": getCategoryName(product.categoryId),
       "price": product.price,
       "isOnSale": product.isOnSale ? "Yes" : "No",
-      "isWholesaleProduct": product.isWholesaleProduct ? "Yes" : "No",
+     
       "stockQuantity": product.stockQuantity,
       "images": product.images && product.images.length > 0
         ? product.images.map(getImageURL).join("; ")
@@ -481,16 +474,7 @@ const EcommerceProducts = () => {
         enableColumnFilter: false,
         cell: (cell) => <>{cell.getValue() || "N/A"}</>,
       },
-      {
-        header: "Type",
-        accessorKey: "isWholesaleProduct",
-        enableColumnFilter: false,
-        cell: (cell) => (
-          <span className={`badge ${cell.getValue() ? "bg-success" : "bg-primary"}`}>
-            {cell.getValue() ? "Wholesale" : "Retail"}
-          </span>
-        ),
-      },
+      
       {
         header: "Stock",
         accessorKey: "stockQuantity",
@@ -517,18 +501,20 @@ const EcommerceProducts = () => {
               >
                 <i className="ri-more-fill" />
               </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-end">
+              <DropdownMenu className="dropdown-menu-end" >
+              <DropdownItem
+                  href={`/apps-ecommerce-edit-product/${cell.row.original.$id}`}
+                >
+                  <i className="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit
+                </DropdownItem>
+
                 <DropdownItem
                   href={`/apps-ecommerce-product-details/${cell.row.original.$id}`}
                 >
                   <i className="ri-eye-fill align-bottom me-2 text-muted"></i> View
                 </DropdownItem>
 
-                <DropdownItem
-                  href={`/apps-ecommerce-edit-product/${cell.row.original.$id}`}
-                >
-                  <i className="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit
-                </DropdownItem>
+               
 
                 <DropdownItem divider />
                 <DropdownItem
@@ -584,7 +570,6 @@ const EcommerceProducts = () => {
                           min: priceSliderRange.min,
                           max: priceSliderRange.max,
                         });
-                        setIsWholesaleFilter(false);
                         setIsOnSaleFilter(false);
                         const minCostInput = document.getElementById("minCost");
                         const maxCostInput = document.getElementById("maxCost");
@@ -704,27 +689,8 @@ const EcommerceProducts = () => {
                 </div>
               </div>
 
-              {/* Wholesale Filter with Toggle Switch */}
-              <div className="card-body border-bottom">
-                <p className="text-muted text-uppercase fs-12 fw-medium mb-2">
-                  Wholesale
-                </p>
-                <div className="form-check form-switch mb-3">
-                  <Input
-                    className="form-check-input"
-                    type="checkbox"
-                    role="switch"
-                    id="wholesaleSwitch"
-                    checked={isWholesaleFilter}
-                    onChange={(e) => {
-                      setIsWholesaleFilter(e.target.checked);
-                    }}
-                  />
-                  <Label className="form-check-label" htmlFor="wholesaleSwitch">
-                    Show only wholesale products
-                  </Label>
-                </div>
-              </div>
+             
+              
             </Card>
           </Col>
 

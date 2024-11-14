@@ -27,7 +27,7 @@ export const collections = [
   },
   {
     id: "670760c60037a5149b81",
-    name: "Generalimages",
+    name: "GeneralData",
   },
   {
     id: "67076d3400357d0fb6dc",
@@ -43,7 +43,7 @@ export const collections = [
   },
   {
     id: "671be6ef003db36ab64e",
-    name: "banners",
+    name: "AboutUs",
   },
   {
     id: "671fbd7c003582fe2d83",
@@ -56,5 +56,9 @@ export const collections = [
   {
     id: "6722fe8200213131b4e5",
     name: "Vouchers",
+  },
+  {
+    id: "67319656001975d484eb",
+    name: "testimonials",
   },
 ];

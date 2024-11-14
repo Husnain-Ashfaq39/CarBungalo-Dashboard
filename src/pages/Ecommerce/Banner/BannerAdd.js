@@ -1,5 +1,3 @@
-// src/pages/Banners/BannerAdd.js
-
 import React, { useState } from "react";
 import { Card, CardBody, Col, Container, Row, Input, Label, Form, FormFeedback, Button, CardHeader } from "reactstrap";
 import { useNavigate } from "react-router-dom";
@@ -12,16 +10,16 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const BannerAdd = () => {
+const AddAboutUs = () => {
   const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileRejectionErrors, setFileRejectionErrors] = useState([]);
 
   const validation = useFormik({
-    initialValues: { title: "", subtitle: "" },
+    initialValues: { title: "", content: "" },
     validationSchema: Yup.object({
       title: Yup.string().required("Please enter a title"),
-      subtitle: Yup.string().required("Please enter a subtitle"),
+      content: Yup.string().required("Please enter a content"),
     }),
     onSubmit: async (values) => {
       try {
@@ -33,19 +31,19 @@ const BannerAdd = () => {
         const uploadedImage = await storageServices.images.createFile(selectedFile);
         const imageId = uploadedImage.$id;
 
-        const bannerData = {
+        const aboutusData = {
           title: values.title,
-          subtitle: values.subtitle,
+          content: values.content,
           imageId,
         };
 
-        await db.banners.create(bannerData);
+        await db.AboutUs.create(aboutusData);
 
-        toast.success("Banner has been added successfully");
+        toast.success("About Us has been added successfully");
         navigate("/bannerlist");
       } catch (error) {
-        console.error("Error adding banner:", error);
-        toast.error("Failed to add banner. Please try again.");
+        console.error("Error adding Data:", error);
+        toast.error("Failed to add About Us. Please try again.");
       }
     },
   });
@@ -69,7 +67,7 @@ const BannerAdd = () => {
     <div className="page-content">
       <ToastContainer closeButton={false} limit={1} />
       <Container fluid>
-        <BreadCrumb title="Add Banner" pageTitle="Banners" />
+        <BreadCrumb title="Add About Us" pageTitle="About Us" />
         <Form onSubmit={validation.handleSubmit}>
           <Row>
             <Col lg={8}>
@@ -95,21 +93,21 @@ const BannerAdd = () => {
                   </div>
 
                   <div className="mb-3">
-                    <Label className="form-label" htmlFor="subtitle-input">
-                      Subtitle <span className="text-danger">*</span>
+                    <Label className="form-label" htmlFor="content-input">
+                      content <span className="text-danger">*</span>
                     </Label>
                     <Input
                       type="text"
-                      id="subtitle-input"
-                      placeholder="Enter subtitle"
-                      name="subtitle"
-                      value={validation.values.subtitle}
+                      id="content-input"
+                      placeholder="Enter content"
+                      name="content"
+                      value={validation.values.content}
                       onBlur={validation.handleBlur}
                       onChange={validation.handleChange}
-                      invalid={validation.errors.subtitle && validation.touched.subtitle}
+                      invalid={validation.errors.content && validation.touched.content}
                     />
-                    {validation.errors.subtitle && validation.touched.subtitle && (
-                      <FormFeedback>{validation.errors.subtitle}</FormFeedback>
+                    {validation.errors.content && validation.touched.content && (
+                      <FormFeedback>{validation.errors.content}</FormFeedback>
                     )}
                   </div>
                 </CardBody>
@@ -117,7 +115,7 @@ const BannerAdd = () => {
 
               <Card>
                 <CardHeader>
-                  <h5 className="card-title mb-0">Banner Image</h5>
+                  <h5 className="card-title mb-0">About us Image</h5>
                 </CardHeader>
                 <CardBody>
                   <div {...getRootProps()} className="dropzone dz-clickable">
@@ -142,7 +140,7 @@ const BannerAdd = () => {
               </Card>
 
               <div className="text-end mb-3">
-                <Button type="submit" color="success">Add Banner</Button>
+                <Button type="submit" color="success">Add Data</Button>
               </div>
             </Col>
           </Row>
@@ -152,4 +150,4 @@ const BannerAdd = () => {
   );
 };
 
-export default BannerAdd;
+export default AddAboutUs;

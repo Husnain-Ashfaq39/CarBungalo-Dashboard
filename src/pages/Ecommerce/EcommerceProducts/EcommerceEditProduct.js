@@ -167,12 +167,12 @@ const EcommerceEditProduct = () => {
       tags: productData?.tags ? productData.tags.join(",") : "",
       isOnSale: productData?.isOnSale || false,
       discountPrice: productData?.discountPrice || "",
-      productType: productType,
+      
       barcode: productData?.barcode || "", // New field
       taxExclusivePrice: productData?.taxExclusivePrice || "", // New field
       tax: productData?.tax || "0", // New field
       bannerLabel: productData?.bannerLabel || "", // New field
-      minimumPurchaseQuantity: productData?.minimumPurchaseQuantity || "",
+      
       lowStockAlert: productData?.lowStockAlert || "", // Add this line
     },
     validationSchema: Yup.object({
@@ -188,9 +188,7 @@ const EcommerceEditProduct = () => {
         .min(0, "Stock Quantity cannot be negative")
         .required("Please enter the product stock"),
       categoryId: Yup.string().required("Please select a product category"),
-      productType: Yup.string()
-        .oneOf(["retail", "wholesale"], "Invalid product type")
-        .required("Please select a product type"),
+     
       isOnSale: Yup.boolean().notRequired(),
       discountPrice: Yup.number()
         .transform((value, originalValue) =>
@@ -223,15 +221,6 @@ const EcommerceEditProduct = () => {
         .max(100, "Tax cannot exceed 100%")
         .required("Please enter the tax percentage"),
       bannerLabel: Yup.string(),
-      minimumPurchaseQuantity: Yup.number()
-        .when('productType', {
-          is: 'wholesale',
-          then: () => Yup.number()
-            .required('Minimum Purchase Quantity is required for wholesale products')
-            .positive('Minimum Purchase Quantity must be a positive number')
-            .integer('Minimum Purchase Quantity must be an integer'),
-          otherwise: () => Yup.number().nullable()
-        }),
       lowStockAlert: Yup.number()
         .transform((value, originalValue) =>
           originalValue === "" ? null : value
@@ -293,12 +282,10 @@ const EcommerceEditProduct = () => {
           discountPrice: values.isOnSale
             ? parseFloat(values.discountPrice)
             : null,
-          isWholesaleProduct: values.productType === "wholesale",
           barcode: values.barcode,
           taxExclusivePrice: parseFloat(values.taxExclusivePrice),
           tax: parseFloat(values.tax),
           bannerLabel: values.bannerLabel,
-          minimumPurchaseQuantity: values.productType === 'wholesale' ? parseInt(values.minimumPurchaseQuantity, 10) : null,
           lowStockAlert: values.lowStockAlert ? parseInt(values.lowStockAlert) : null,
         };
 
@@ -352,51 +339,8 @@ const EcommerceEditProduct = () => {
             <Col lg={8}>
               <Card>
                 <CardBody>
-                  {/* Product Type Selection */}
-                  <div className="mb-3">
-                    <Label className="form-label">Product Type</Label>
-                    <div>
-                      <div className="form-check form-check-inline">
-                        <Input
-                          type="radio"
-                          name="productType"
-                          id="retail"
-                          value="retail"
-                          checked={formik.values.productType === "retail"}
-                          onChange={() => {
-                            formik.setFieldValue("productType", "retail");
-                            setProductType("retail");
-                          }}
-                          className="form-check-input"
-                        />
-                        <Label className="form-check-label" htmlFor="retail">
-                          Retail
-                        </Label>
-                      </div>
-                      <div className="form-check form-check-inline">
-                        <Input
-                          type="radio"
-                          name="productType"
-                          id="wholesale"
-                          value="wholesale"
-                          checked={formik.values.productType === "wholesale"}
-                          onChange={() => {
-                            formik.setFieldValue("productType", "wholesale");
-                            setProductType("wholesale");
-                          }}
-                          className="form-check-input"
-                        />
-                        <Label className="form-check-label" htmlFor="wholesale">
-                          Wholesale
-                        </Label>
-                      </div>
-                    </div>
-                    {formik.errors.productType && formik.touched.productType && (
-                      <FormFeedback type="invalid" className="d-block">
-                        {formik.errors.productType}
-                      </FormFeedback>
-                    )}
-                  </div>
+                 
+                  
 
                   {/* Product Title */}
                   <div className="mb-3">
@@ -629,15 +573,11 @@ const EcommerceEditProduct = () => {
                           type="number"
                           className="form-control"
                           name="price"
-                          placeholder={`Enter ${
-                            formik.values.productType === "wholesale"
-                              ? "wholesale"
-                              : "retail"
-                          } price`}
+                          placeholder={`Enter  price`}
                           value={formik.values.price}
                           onBlur={formik.handleBlur}
                           onChange={formik.handleChange}
-                          disabled
+                          
                           invalid={
                             formik.errors.price && formik.touched.price
                           }
@@ -830,7 +770,7 @@ const EcommerceEditProduct = () => {
               {/* Banner Label */}
               <Card>
                 <CardHeader>
-                  <h5 className="card-title mb-0">Restricted Product Banner Label</h5>
+                  <h5 className="card-title mb-0">Leave Label for product</h5>
                 </CardHeader>
                 <CardBody>
                   <Input

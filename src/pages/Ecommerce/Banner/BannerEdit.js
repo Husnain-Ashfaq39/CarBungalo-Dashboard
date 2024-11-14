@@ -1,4 +1,4 @@
-// src/pages/Banners/BannerEdit.js
+// src/pages/AboutUs/BannerEdit.js
 
 import React, { useState, useEffect } from "react";
 import { Card, CardBody, Col, Container, Row, Input, Label, Form, FormFeedback, Button, CardHeader } from "reactstrap";
@@ -18,51 +18,51 @@ const BannerEdit = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileRejectionErrors, setFileRejectionErrors] = useState([]);
   const [existingImageUrl, setExistingImageUrl] = useState(null);
-  const [bannerData, setBannerData] = useState(null);
+  const [aboutusData, setaboutusData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBanner = async () => {
+    const fetchaboutus = async () => {
       try {
         setIsLoading(true);
-        const banner = await db.banners.get(id);
-        setBannerData(banner);
-        const imageUrlResponse = storageServices.images.getFilePreview(banner.imageId);
+        const aboutus = await db.AboutUs.get(id);
+        setaboutusData(aboutus);
+        const imageUrlResponse = storageServices.images.getFilePreview(aboutus.imageId);
         setExistingImageUrl(imageUrlResponse.href);
       } catch (error) {
-        console.error("Failed to fetch banner:", error);
-        toast.error("Failed to fetch banner data");
+        console.error("Failed to fetch aboutus:", error);
+        toast.error("Failed to fetch aboutus data");
       } finally {
         setIsLoading(false);
       }
     };
-    fetchBanner();
+    fetchaboutus();
   }, [id]);
 
   const validation = useFormik({
     enableReinitialize: true,
-    initialValues: { title: bannerData?.title || "", subtitle: bannerData?.subtitle || "" },
+    initialValues: { title: aboutusData?.title || "", content: aboutusData?.content || "" },
     validationSchema: Yup.object({
       title: Yup.string().required("Please enter a title"),
-      subtitle: Yup.string().required("Please enter a subtitle"),
+      content: Yup.string().required("Please enter a content"),
     }),
     onSubmit: async (values) => {
       try {
-        let imageId = bannerData.imageId;
+        let imageId = aboutusData.imageId;
         if (selectedFile) {
           const uploadedImage = await storageServices.images.createFile(selectedFile);
           imageId = uploadedImage.$id;
-          if (bannerData.imageId) await storageServices.images.deleteFile(bannerData.imageId);
+          if (aboutusData.imageId) await storageServices.images.deleteFile(aboutusData.imageId);
         }
 
-        const updatedBannerData = { title: values.title, subtitle: values.subtitle, imageId };
-        await db.banners.update(id, updatedBannerData);
+        const updatedaboutusData = { title: values.title, content: values.content, imageId };
+        await db.AboutUs.update(id, updatedaboutusData);
 
-        toast.success("Banner updated successfully");
+        toast.success("aboutus updated successfully");
         navigate("/bannerlist");
       } catch (error) {
-        console.error("Error updating banner:", error);
-        toast.error("Failed to update banner. Please try again.");
+        console.error("Error updating aboutus:", error);
+        toast.error("Failed to update aboutus. Please try again.");
       }
     },
   });
@@ -100,7 +100,7 @@ const BannerEdit = () => {
     <div className="page-content">
       <ToastContainer closeButton={false} limit={1} />
       <Container fluid>
-        <BreadCrumb title="Edit Banner" pageTitle="Banners" />
+        <BreadCrumb title="Edit aboutus" pageTitle="AboutUs" />
         <Form onSubmit={validation.handleSubmit}>
           <Row>
             <Col lg={8}>
@@ -126,21 +126,21 @@ const BannerEdit = () => {
                   </div>
 
                   <div className="mb-3">
-                    <Label className="form-label" htmlFor="subtitle-input">
-                      Subtitle <span className="text-danger">*</span>
+                    <Label className="form-label" htmlFor="content-input">
+                      content <span className="text-danger">*</span>
                     </Label>
                     <Input
                       type="text"
-                      id="subtitle-input"
-                      placeholder="Enter subtitle"
-                      name="subtitle"
-                      value={validation.values.subtitle}
+                      id="content-input"
+                      placeholder="Enter content"
+                      name="content"
+                      value={validation.values.content}
                       onBlur={validation.handleBlur}
                       onChange={validation.handleChange}
-                      invalid={validation.errors.subtitle && validation.touched.subtitle}
+                      invalid={validation.errors.content && validation.touched.content}
                     />
-                    {validation.errors.subtitle && validation.touched.subtitle && (
-                      <FormFeedback>{validation.errors.subtitle}</FormFeedback>
+                    {validation.errors.content && validation.touched.content && (
+                      <FormFeedback>{validation.errors.content}</FormFeedback>
                     )}
                   </div>
                 </CardBody>
@@ -148,7 +148,7 @@ const BannerEdit = () => {
 
               <Card>
                 <CardHeader>
-                  <h5 className="card-title mb-0">Banner Image</h5>
+                  <h5 className="card-title mb-0">aboutus Image</h5>
                 </CardHeader>
                 <CardBody>
                   <div {...getRootProps()} className="dropzone dz-clickable">
@@ -173,7 +173,7 @@ const BannerEdit = () => {
               </Card>
 
               <div className="text-end mb-3">
-                <Button type="submit" color="success">Update Banner</Button>
+                <Button type="submit" color="success">Update aboutus</Button>
               </div>
             </Col>
           </Row>

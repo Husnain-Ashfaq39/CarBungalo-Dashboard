@@ -120,16 +120,16 @@ const menuItems = [
   },
   {
     id: "banner-list",
-    label: "Banner List",
+    label: "About Us",
     icon: "ri-pencil-line",
     link: "/bannerlist",
     roles: [roles.ADMIN, roles.MARKETING],
   },
   {
-    id: "add-banner",
-    label: "Add Banner",
-    icon: "ri-add-circle-line",
-    link: "/addbanner",
+    id: "testimonial-list",
+    label: "Testimonial List",
+    icon: "ri-user-settings-line",
+    link: "/testimoniallist",
     roles: [roles.ADMIN, roles.MARKETING],
   },
   {
