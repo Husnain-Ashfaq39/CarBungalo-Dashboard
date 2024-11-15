@@ -1,6 +1,6 @@
 // src/pages/HeroSection/HeroSectionList.js
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Row,
@@ -31,24 +31,25 @@ const GeneralimagesList = () => {
         let heroData = response.documents[0];
 
         if (!heroData) {
-          // Update the `dummyData` in `fetchHeroSection`
+          // Updated dummyData to include terms
           const dummyData = {
             logo: "",
-            facebook: "www.facebook.com",
-            twitter: "www.twitter.com",
-            instagram: "www.instagram.com",
-            linkedin: "www.linkedin.com"
+            facebook: "https://www.facebook.com",
+            twitter: "https://www.twitter.com",
+            instagram: "https://www.instagram.com",
+            linkedin: "https://www.linkedin.com",
+            terms: "<p>Default Terms and Conditions.</p>", // Added terms field
           };
 
           const newDocument = await db.GeneralData.create(dummyData);
           heroData = newDocument;
-          toast.success("Dummy Images created.");
+          toast.success("Dummy General Data created.");
         }
 
         setHeroSection(heroData);
       } catch (error) {
-        console.error("Failed to fetch Images:", error);
-        toast.error("Failed to fetch Images.");
+        console.error("Failed to fetch General Data:", error);
+        toast.error("Failed to fetch General Data.");
       } finally {
         setIsLoading(false);
       }
@@ -59,8 +60,8 @@ const GeneralimagesList = () => {
   // Function to get image URL
   const getImageURL = (imageId) => {
     if (!imageId) return null;
-    const imageUrlResponse = storageServices.images.getFileDownload(imageId);
-    return imageUrlResponse;
+    // Assuming getFileDownload returns a URL string
+    return storageServices.images.getFileDownload(imageId);
   };
 
   // Helper function to render loading animation
@@ -144,22 +145,99 @@ const GeneralimagesList = () => {
                       </tr>
                       <tr>
                         <th>Facebook</th>
-                        <td>{heroSection.facebook ? <a href={heroSection.facebook} target="_blank" rel="noopener noreferrer">{heroSection.facebook}</a> : "No Facebook link."}</td>
+                        <td>
+                          {heroSection.facebook ? (
+                            <a
+                              href={
+                                heroSection.facebook.startsWith("http")
+                                  ? heroSection.facebook
+                                  : `https://${heroSection.facebook}`
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {heroSection.facebook}
+                            </a>
+                          ) : (
+                            "No Facebook link."
+                          )}
+                        </td>
                       </tr>
                       <tr>
                         <th>Twitter</th>
-                        <td>{heroSection.twitter ? <a href={heroSection.twitter} target="_blank" rel="noopener noreferrer">{heroSection.twitter}</a> : "No Twitter link."}</td>
+                        <td>
+                          {heroSection.twitter ? (
+                            <a
+                              href={
+                                heroSection.twitter.startsWith("http")
+                                  ? heroSection.twitter
+                                  : `https://${heroSection.twitter}`
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {heroSection.twitter}
+                            </a>
+                          ) : (
+                            "No Twitter link."
+                          )}
+                        </td>
                       </tr>
                       <tr>
                         <th>Instagram</th>
-                        <td>{heroSection.instagram ? <a href={heroSection.instagram} target="_blank" rel="noopener noreferrer">{heroSection.instagram}</a> : "No Instagram link."}</td>
+                        <td>
+                          {heroSection.instagram ? (
+                            <a
+                              href={
+                                heroSection.instagram.startsWith("http")
+                                  ? heroSection.instagram
+                                  : `https://${heroSection.instagram}`
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {heroSection.instagram}
+                            </a>
+                          ) : (
+                            "No Instagram link."
+                          )}
+                        </td>
                       </tr>
                       <tr>
                         <th>LinkedIn</th>
-                        <td>{heroSection.linkedin ? <a href={heroSection.linkedin} target="_blank" rel="noopener noreferrer">{heroSection.linkedin}</a> : "No LinkedIn link."}</td>
+                        <td>
+                          {heroSection.linkedin ? (
+                            <a
+                              href={
+                                heroSection.linkedin.startsWith("http")
+                                  ? heroSection.linkedin
+                                  : `https://${heroSection.linkedin}`
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {heroSection.linkedin}
+                            </a>
+                          ) : (
+                            "No LinkedIn link."
+                          )}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Terms and Conditions</th>
+                        <td>
+                          {heroSection.terms ? (
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: heroSection.terms,
+                              }}
+                            />
+                          ) : (
+                            "No Terms and Conditions provided."
+                          )}
+                        </td>
                       </tr>
                     </tbody>
-
                   </table>
                 </CardBody>
               </Card>

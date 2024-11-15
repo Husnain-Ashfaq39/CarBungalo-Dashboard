@@ -10,6 +10,8 @@ import {
   Form,
   Button,
   CardHeader,
+  Label,
+  FormFeedback,
 } from "reactstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
@@ -23,6 +25,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Lottie from "lottie-react";
 import loadingAnimation from "../../../assets/animations/loading.json";
 import noDataAnimation from "../../../assets/animations/search.json";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const GeneralDataEdit = () => {
   const navigate = useNavigate();
@@ -46,7 +50,7 @@ const GeneralDataEdit = () => {
         setHeroData(hero);
 
         if (hero.logo) {
-          const loginImageUrlResponse = storageServices.images.getFileDownload(
+          const loginImageUrlResponse = await storageServices.images.getFileDownload(
             hero.logo
           );
           setExistingLoginImageUrl(loginImageUrlResponse);
@@ -64,20 +68,20 @@ const GeneralDataEdit = () => {
 
   const validation = useFormik({
     enableReinitialize: true,
-    // Update `initialValues` and `validationSchema`
     initialValues: {
       logo: heroData?.logo || "",
       facebook: heroData?.facebook || "",
       twitter: heroData?.twitter || "",
       instagram: heroData?.instagram || "",
-      linkedin: heroData?.linkedin || ""
+      linkedin: heroData?.linkedin || "",
+      terms: heroData?.terms || "", // New field for Terms and Conditions
     },
     validationSchema: Yup.object({
       facebook: Yup.string().url("Invalid Facebook URL"),
       twitter: Yup.string().url("Invalid Twitter URL"),
       instagram: Yup.string().url("Invalid Instagram URL"),
       linkedin: Yup.string().url("Invalid LinkedIn URL"),
-      // Add other validations as necessary
+      terms: Yup.string().required("Please enter the Terms and Conditions"), // Validation for Terms
     }),
 
     onSubmit: async (values) => {
@@ -100,7 +104,8 @@ const GeneralDataEdit = () => {
           facebook: values.facebook,
           twitter: values.twitter,
           instagram: values.instagram,
-          linkedin: values.linkedin
+          linkedin: values.linkedin,
+          terms: values.terms, // Include Terms in the update
         };
 
         await db.GeneralData.update(id, updatedHeroData);
@@ -182,7 +187,6 @@ const GeneralDataEdit = () => {
                   {...getLoginRootProps()}
                   className="dropzone dz-clickable"
                   style={{
-
                     padding: "20px",
                     textAlign: "center",
                     cursor: "pointer",
@@ -210,17 +214,50 @@ const GeneralDataEdit = () => {
               </CardBody>
             </Card>
 
+            {/* Terms and Conditions */}
+            <Card>
+              <CardHeader>
+                <h5 className="card-title mb-0">Terms and Conditions</h5>
+              </CardHeader>
+              <CardBody>
+                <div className="mb-3">
+                  <Label className="form-label">Terms and Conditions <span className="text-danger">*</span></Label>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={validation.values.terms || ""}
+                    onChange={(event, editor) => {
+                      validation.setFieldValue("terms", editor.getData());
+                    }}
+                  />
+                  {validation.errors.terms && validation.touched.terms ? (
+                    <FormFeedback type="invalid" className="d-block">
+                      {validation.errors.terms}
+                    </FormFeedback>
+                  ) : null}
+                </div>
+              </CardBody>
+            </Card>
+
             {/* Submit Button */}
-            
+            <div className="text-end mb-3">
+              <Button type="submit" color="success">
+                Update Images
+              </Button>
+            </div>
           </Col>
         </Row>
+
         <Row>
           <Col lg={6}>
             <div className="mb-3">
-              <label htmlFor="facebook" className="form-label">Facebook URL</label>
+              <Label htmlFor="facebook" className="form-label">Facebook URL</Label>
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${
+                  validation.touched.facebook && validation.errors.facebook
+                    ? "is-invalid"
+                    : ""
+                }`}
                 id="facebook"
                 value={validation.values.facebook}
                 onChange={validation.handleChange}
@@ -228,16 +265,20 @@ const GeneralDataEdit = () => {
                 placeholder="Enter Facebook URL"
               />
               {validation.touched.facebook && validation.errors.facebook ? (
-                <div className="text-danger">{validation.errors.facebook}</div>
+                <div className="invalid-feedback">{validation.errors.facebook}</div>
               ) : null}
             </div>
           </Col>
           <Col lg={6}>
             <div className="mb-3">
-              <label htmlFor="twitter" className="form-label">Twitter URL</label>
+              <Label htmlFor="twitter" className="form-label">Twitter URL</Label>
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${
+                  validation.touched.twitter && validation.errors.twitter
+                    ? "is-invalid"
+                    : ""
+                }`}
                 id="twitter"
                 value={validation.values.twitter}
                 onChange={validation.handleChange}
@@ -245,16 +286,20 @@ const GeneralDataEdit = () => {
                 placeholder="Enter Twitter URL"
               />
               {validation.touched.twitter && validation.errors.twitter ? (
-                <div className="text-danger">{validation.errors.twitter}</div>
+                <div className="invalid-feedback">{validation.errors.twitter}</div>
               ) : null}
             </div>
           </Col>
           <Col lg={6}>
             <div className="mb-3">
-              <label htmlFor="instagram" className="form-label">Instagram URL</label>
+              <Label htmlFor="instagram" className="form-label">Instagram URL</Label>
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${
+                  validation.touched.instagram && validation.errors.instagram
+                    ? "is-invalid"
+                    : ""
+                }`}
                 id="instagram"
                 value={validation.values.instagram}
                 onChange={validation.handleChange}
@@ -262,16 +307,20 @@ const GeneralDataEdit = () => {
                 placeholder="Enter Instagram URL"
               />
               {validation.touched.instagram && validation.errors.instagram ? (
-                <div className="text-danger">{validation.errors.instagram}</div>
+                <div className="invalid-feedback">{validation.errors.instagram}</div>
               ) : null}
             </div>
           </Col>
           <Col lg={6}>
             <div className="mb-3">
-              <label htmlFor="linkedin" className="form-label">LinkedIn URL</label>
+              <Label htmlFor="linkedin" className="form-label">LinkedIn URL</Label>
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${
+                  validation.touched.linkedin && validation.errors.linkedin
+                    ? "is-invalid"
+                    : ""
+                }`}
                 id="linkedin"
                 value={validation.values.linkedin}
                 onChange={validation.handleChange}
@@ -279,17 +328,11 @@ const GeneralDataEdit = () => {
                 placeholder="Enter LinkedIn URL"
               />
               {validation.touched.linkedin && validation.errors.linkedin ? (
-                <div className="text-danger">{validation.errors.linkedin}</div>
+                <div className="invalid-feedback">{validation.errors.linkedin}</div>
               ) : null}
             </div>
           </Col>
-          <div className="text-end mb-3">
-              <Button type="submit" color="success">
-                Update Images
-              </Button>
-            </div>
         </Row>
-
       </Form>
     );
   }, [
@@ -297,6 +340,23 @@ const GeneralDataEdit = () => {
     getLoginRootProps,
     getLoginInputProps,
     existingLoginImageUrl,
+    validation.values.terms,
+    validation.errors.terms,
+    validation.touched.terms,
+    validation.handleChange,
+    validation.handleBlur,
+    validation.values.facebook,
+    validation.errors.facebook,
+    validation.touched.facebook,
+    validation.values.twitter,
+    validation.errors.twitter,
+    validation.touched.twitter,
+    validation.values.instagram,
+    validation.errors.instagram,
+    validation.touched.instagram,
+    validation.values.linkedin,
+    validation.errors.linkedin,
+    validation.touched.linkedin,
   ]);
 
   return (
