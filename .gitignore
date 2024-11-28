@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/pakage-lock.json
 /.pnp
 .pnp.js
 
