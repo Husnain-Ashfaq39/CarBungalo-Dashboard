@@ -11,7 +11,7 @@ import StoreVisits from "./StoreVisits";
 import TopSellers from "./TopSellers";
 
 const DashboardEcommerce = () => {
-  document.title = "Dashboard | Iwalewah";
+  document.title = "Dashboard | CarBungalo";
 
   const [rightColumn, setRightColumn] = useState(true);
   const toggleRightColumn = () => {

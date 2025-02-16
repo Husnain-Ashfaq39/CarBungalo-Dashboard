@@ -26,7 +26,7 @@ import {
   completeMfaChallenge,
   getCurrentUser,
 } from "../../appwrite/Services/authServices";
-import logo from "../../assets/images/logo.png";
+import logo from "../../assets/images/logo.svg";
 
 const Login = () => {
   const dispatch = useDispatch();

@@ -5,7 +5,7 @@ import { Col, Container, Row } from 'reactstrap';
 
 
 const NotAuthorized = () => {
-document.title ="501 Error | Iwalewah";
+document.title ="501 Error | CarBungalo";
     return (
         <React.Fragment>
             

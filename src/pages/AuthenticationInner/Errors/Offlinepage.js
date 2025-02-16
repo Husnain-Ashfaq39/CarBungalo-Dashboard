@@ -3,7 +3,7 @@ import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 
 
 const Offlinepage = () => {
-    document.title = "Offline Page | Iwalewah";
+    document.title = "Offline Page | CarBungalo";
     return (
         <React.Fragment>
             <div className="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
@@ -15,7 +15,7 @@ const Offlinepage = () => {
                                 <Card className="overflow-hidden">
                                     <CardBody className="p-4">
                                         <div className="text-center">
-                                            <img src="https://img.themesbrand.com/Iwalewah/images/auth-offline.gif" alt="" height="210" />
+                                            <img src="https://img.themesbrand.com/CarBungalo/images/auth-offline.gif" alt="" height="210" />
                                             <h3 className="mt-4 fw-semibold">We're currently offline</h3>
                                             <p className="text-muted mb-4 fs-14">We can't show you this images because you aren't connected to the internet. When you’re back online refresh the page or hit the button below</p>
                                             <Button color="success" className="btn-border"><i className="ri-refresh-line align-bottom"></i> Refresh</Button>

@@ -7,7 +7,7 @@ import ParticlesAuth from "../ParticlesAuth";
 import error from "../../../assets/images/error.svg";
 
 const Basic404 = () => {
-document.title ="404 Error Basic | Iwalewah";
+document.title ="404 Error Basic | CarBungalo";
     return (
         <React.Fragment>
                 <ParticlesAuth>

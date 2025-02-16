@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SimpleBar from "simplebar-react";
 //import logo
-import logo from "../assets/images/logo.png";
-import logoDark from "../assets/images/logo-dark.png";
-import logoLight from "../assets/images/logo-light.png";
+import logo from "../assets/images/logo.svg";
+import logoDark from "../assets/images/logo-dark.svg";
+import logoLight from "../assets/images/logo-light.svg";
 
 // Import auth services
 import { signOutUser } from "../appwrite/Services/authServices";

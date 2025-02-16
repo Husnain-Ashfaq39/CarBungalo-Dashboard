@@ -6,7 +6,7 @@ import { Col, Container, Row } from 'reactstrap';
 import error500 from "../../../assets/images/error500.png";
 
 const Error500 = () => {
-document.title ="500 Error | Iwalewah";
+document.title ="500 Error | CarBungalo";
     return (
         <React.Fragment>
             

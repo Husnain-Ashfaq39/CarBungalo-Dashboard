@@ -3,7 +3,7 @@ const recentFile = [
     id: 1,
     icon: "ri-gallery-fill",
     iconClass: "success",
-    fileName: "logo-dark.png",
+    fileName: "logo-dark.svg",
     fileType: "Media",
     fileItem: "01",
     size: "1.3 MB",
@@ -13,7 +13,7 @@ const recentFile = [
     id: 2,
     icon: "ri-file-pdf-fill",
     iconClass: "danger",
-    fileName: "Iwalewah-invoice.pdf",
+    fileName: "CarBungalo-invoice.pdf",
     fileType: "Documents",
     fileItem: "01",
     size: "1.1 MB",
@@ -23,7 +23,7 @@ const recentFile = [
     id: 3,
     icon: "ri-folder-2-fill",
     iconClass: "warning",
-    fileName: "Iwalewah React",
+    fileName: "CarBungalo React",
     fileType: "Media",
     fileItem: "367",
     size: "934 MB",
@@ -55,7 +55,7 @@ const folderList = [
   { id: 1, folderName: "Projects", folderFile: "349", size: "4.10" },
   { id: 2, folderName: "Documents", folderFile: "2349", size: "27.01" },
   { id: 3, folderName: "Media", folderFile: "12480", size: "20.87" },
-  { id: 4, folderName: "Iwalewah v1.7.0", folderFile: "180", size: "478.65" },
+  { id: 4, folderName: "CarBungalo v1.7.0", folderFile: "180", size: "478.65" },
 ];
 
 export { recentFile, folderList };

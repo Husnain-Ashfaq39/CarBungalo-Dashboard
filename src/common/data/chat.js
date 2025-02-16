@@ -241,7 +241,7 @@ const attachements = [
   {
     id: 2,
     foldericon: "ri-file-ppt-2-line",
-    foldername: "Iwalewah admin.ppt",
+    foldername: "CarBungalo admin.ppt",
     foldersize: "2.4MB",
   },
   {

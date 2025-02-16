@@ -48,13 +48,13 @@ const menuItems = [
     link: "/apps-ecommerce-add-category",
     roles: [roles.ADMIN, roles.OPERATIONS_TEAM_1, roles.OPERATIONS_TEAM_2],
   },
-  {
-    id: "wholesale-requests",
-    label: "Wholesale Requests",
-    icon: "ri-file-list-line",
-    link: "/wholesale-requests",
-    roles: [roles.ADMIN, roles.CUSTOMER_RELATIONS, roles.OPERATIONS_TEAM_1, roles.OPERATIONS_TEAM_2],
-  },
+  // {
+  //   id: "wholesale-requests",
+  //   label: "Wholesale Requests",
+  //   icon: "ri-file-list-line",
+  //   link: "/wholesale-requests",
+  //   roles: [roles.ADMIN, roles.CUSTOMER_RELATIONS, roles.OPERATIONS_TEAM_1, roles.OPERATIONS_TEAM_2],
+  // },
   {
     id: "contact-list",
     label: "Contact List",

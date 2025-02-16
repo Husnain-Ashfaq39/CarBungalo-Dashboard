@@ -15,7 +15,6 @@ import {
   FormFeedback,
   Button,
 } from "reactstrap";
-import { Link } from "react-router-dom";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import TableContainer from "../../Components/Common/TableContainer";
 import DeleteModal from "../../Components/Common/DeleteModal";
@@ -59,7 +58,12 @@ const EcommerceVouchers = () => {
     setLoading(true);
     try {
       const response = await db.Vouchers.list();
-      setVouchers(response.documents);
+      setVouchers(response.documents.map(voucher => ({
+        ...voucher,
+        count: voucher.count || 0,
+        usageLimit: voucher.usageLimit || 0,
+        valid: voucher.valid !== undefined ? voucher.valid : true,
+      })));
     } catch (err) {
       console.error("Fetch Vouchers Error:", err);
       setError("Failed to fetch vouchers");
@@ -105,6 +109,9 @@ const EcommerceVouchers = () => {
     initialValues: {
       code: selectedVoucher?.code || "",
       discountValue: selectedVoucher?.discountValue || "",
+      count: selectedVoucher?.count || 0,
+      usageLimit: selectedVoucher?.usageLimit || 20,
+      valid: selectedVoucher?.valid !== undefined ? selectedVoucher.valid : true,
     },
     validationSchema: Yup.object({
       code: Yup.string()
@@ -114,6 +121,9 @@ const EcommerceVouchers = () => {
         .required("Discount value is required")
         .positive("Discount value must be positive")
         .max(100, "Discount value cannot exceed 100"),
+      usageLimit: Yup.number()
+        .min(0, "Usage limit cannot be negative")
+        .integer("Usage limit must be an integer"),
     }),
     onSubmit: async (values, { setErrors }) => {
       // Normalize the code by trimming and converting to uppercase
@@ -131,17 +141,26 @@ const EcommerceVouchers = () => {
         return;
       }
 
+      // Determine validity based on usage limit
+      const usageLimit = values.usageLimit || 20;
+      const isValid = 0 < usageLimit;
+
       try {
         if (isEdit) {
           await db.Vouchers.update(selectedVoucher.$id, {
             code: normalizedCode,
             discountValue: parseFloat(values.discountValue),
+            usageLimit: usageLimit,
+            valid: isValid,
           });
           toast.success("Voucher updated successfully");
         } else {
           await db.Vouchers.create({
             code: normalizedCode,
             discountValue: parseFloat(values.discountValue),
+            count: 0,
+            usageLimit: usageLimit,
+            valid: isValid,
           });
           toast.success("Voucher created successfully");
         }
@@ -167,6 +186,22 @@ const EcommerceVouchers = () => {
         accessorKey: "discountValue",
         enableColumnFilter: false,
         cell: (cell) => `${cell.getValue()}%`,
+      },
+      {
+        header: "Usage Count",
+        accessorKey: "count",
+        enableColumnFilter: false,
+      },
+      {
+        header: "Usage Limit",
+        accessorKey: "usageLimit",
+        enableColumnFilter: false,
+      },
+      {
+        header: "Valid",
+        accessorKey: "valid",
+        enableColumnFilter: false,
+        cell: (cell) => (cell.getValue() ? "Yes" : "No"),
       },
       {
         header: "Action",
@@ -301,6 +336,24 @@ const EcommerceVouchers = () => {
                 />
                 {formik.touched.discountValue && formik.errors.discountValue && (
                   <FormFeedback>{formik.errors.discountValue}</FormFeedback>
+                )}
+              </div>
+              <div className="mb-3">
+                <Label htmlFor="usageLimit" className="form-label">
+                  Usage Limit
+                </Label>
+                <Input
+                  type="number"
+                  id="usageLimit"
+                  name="usageLimit"
+                  placeholder="Enter usage limit"
+                  value={formik.values.usageLimit}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  invalid={formik.touched.usageLimit && formik.errors.usageLimit}
+                />
+                {formik.touched.usageLimit && formik.errors.usageLimit && (
+                  <FormFeedback>{formik.errors.usageLimit}</FormFeedback>
                 )}
               </div>
             </ModalBody>

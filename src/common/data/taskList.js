@@ -71,7 +71,7 @@ const allTask = [
     {
         id: 1,
         taskId: "#VLZ632",
-        project: "Iwalewah - v1.0.0",
+        project: "CarBungalo - v1.0.0",
         task: "Error message when placing an orders?",
         creater: "Robert McMahon",
         // subItem: [avatar3, avatar1],
@@ -255,7 +255,7 @@ const kanbanBoardData = [
             {
                 id: 12,
                 taskId: "#VL2436",
-                title: "Iwalewah - Admin Layout Design",
+                title: "CarBungalo - Admin Layout Design",
                 desc: "The dashboard is the front page of the Administration UI.",
                 date: "07 Jan, 2022",
                 tags: [

@@ -725,7 +725,7 @@ const EcommerceOrders = () => {
     }
   };
 
-  document.title = "Orders | Iwalewah";
+  document.title = "Orders | CarBungalo";
 
   return (
     <div className="page-content">

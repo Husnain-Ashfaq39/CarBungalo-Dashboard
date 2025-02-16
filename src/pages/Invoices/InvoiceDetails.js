@@ -13,9 +13,9 @@ import {
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link, useParams } from "react-router-dom";
 
-import logoDark from "../../assets/images/logo-dark.png";
-import logoLight from "../../assets/images/logo-light.png";
-import logo from "../../assets/images/logo.png";
+import logoDark from "../../assets/images/logo-dark.svg";
+import logoLight from "../../assets/images/logo-light.svg";
+import logo from "../../assets/images/logo.svg";
 
 import Lottie from "lottie-react";
 import loadingAnimation from "../../assets/animations/loading.json";
@@ -240,7 +240,7 @@ const InvoiceDetails = () => {
                               Address
                             </h6>
                             <p className="text-muted mb-1" id="address-details">
-                              Iwalewah House 3-4 Pavilion Parade, Wood Lane,
+                              CarBungalo House 3-4 Pavilion Parade, Wood Lane,
                               London, W12 0HQ
                             </p>
                           </div>
@@ -248,7 +248,7 @@ const InvoiceDetails = () => {
                         <div className="flex-shrink-0 mt-sm-0 mt-3">
                           <h6>
                             <span className="text-muted fw-normal">Email:</span>{" "}
-                            <span id="email">support@iwalewah.co.uk</span>
+                            <span id="email">support@CarBungalo.co.uk</span>
                           </h6>
                           <h6>
                             <span className="text-muted fw-normal">
@@ -259,7 +259,7 @@ const InvoiceDetails = () => {
                               className="link-primary"
                               id="website"
                             >
-                              iwalewah.co.uk
+                              CarBungalo.co.uk
                             </Link>
                           </h6>
                           <h6 className="mb-0">

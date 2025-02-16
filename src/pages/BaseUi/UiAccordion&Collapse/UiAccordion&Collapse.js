@@ -345,7 +345,7 @@ const UiAccordions = () => {
         setcoll9(!coll9);
     };
 
-    document.title="Accordions | Iwalewah";
+    document.title="Accordions | CarBungalo";
     
     return (
         <React.Fragment>

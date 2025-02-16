@@ -150,7 +150,7 @@ const tasks = [
     {
         id: 6,
         forId: "task_six",
-        text: "Styling wireframe design and documentation for Iwalewah admin",
+        text: "Styling wireframe design and documentation for CarBungalo admin",
         date: "27 Sep, 2021",
     },
 ];
